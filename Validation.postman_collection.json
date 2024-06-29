@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "37263815-34b1-420c-a4b6-a7aa8ddc4bb4",
+		"name": "Validation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36225199"
+	},
+	"item": [
+		{
+			"name": "Get verifying",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"items\": {\r",
+							"        \"type\": \"object\",\r",
+							"        \"properties\": {\r",
+							"            \"id\": { \"type\": \"integer\" },\r",
+							"            \"user_id\": { \"type\": \"integer\" },\r",
+							"            \"title\": { \"type\": \"string\" },\r",
+							"            \"due_on\": { \"type\": \"string\", \"format\": \"date-time\" },\r",
+							"            \"status\": { \"type\": \"string\" }\r",
+							"        },\r",
+							"        \"required\": [\"id\", \"user_id\", \"title\", \"due_on\", \"status\"]\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validação do Schema\", function() {\r",
+							"    pm.expect(tv4.validate(data, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Todos os itens têm status 'completed'\", function() {\r",
+							"    data.forEach(function(item) {\r",
+							"        pm.expect(item.status).to.eql(\"completed\");\r",
+							"    });\r",
+							"});\r",
+							"pm.test(\"Campo 'due_on' é uma data válida\", function() {\r",
+							"    data.forEach(function(item) {\r",
+							"        var dueOnDate = new Date(item.due_on);\r",
+							"        pm.expect(dueOnDate.toString()).not.to.eql(\"Invalid Date\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/todos",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"todos"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
